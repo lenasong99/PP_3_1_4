@@ -1,5 +1,7 @@
 package ru.kata.spring.boot_security.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,17 +27,13 @@ public class AdminController {
 
     @GetMapping("")
     public String showAllUsers(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User thisUser = userService.findByUsername(auth.getName());
+        model.addAttribute("thisUser", thisUser);
         model.addAttribute("allUsers", userService.getAllUsers());
+        model.addAttribute("roles", roleRepository.findAll());
+        model.addAttribute("newUser", new User());
         return "all-users";
-    }
-
-    @GetMapping("/new")
-    public String newUserForm(Model model) {
-        User user = new User();
-        ArrayList<Role> role = new ArrayList<>();
-        model.addAttribute("user", user);
-        model.addAttribute("role", role);
-        return "user-create";
     }
 
    @PostMapping("/new")
@@ -52,13 +50,7 @@ public class AdminController {
         return roleSet;
     }
 
-    @GetMapping("/edit-user")
-    public String updateUserForm(@RequestParam("id") Integer id, Model model) {
-        User user = userService.getUserById(id);
-        model.addAttribute("user", user);
-        return "/edit-user";
-    }
-    @PostMapping("/edit-user")
+    @PostMapping("/update")
     public String updateUser(@ModelAttribute("user") User user, @RequestParam(value = "role") String[] roles) {
         user.setRoles(getRoles(roles));
         userService.saveUser(user);

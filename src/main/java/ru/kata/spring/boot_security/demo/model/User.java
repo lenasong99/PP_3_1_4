@@ -17,12 +17,16 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(name = "name")
+    private String name;
+    @Column(name = "surname")
+    private String surname;
+    @Column(name = "age")
+    private Integer age;
     @Column(name = "username")
     private String username;
     @Column(name = "password")
     private String password;
-    @Column(name = "email")
-    private String email;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "USER_ID"),
@@ -30,10 +34,10 @@ public class User implements UserDetails {
     )
     private Collection<Role> roles;
 
-    public User(String username, String password, String email, Collection<Role> roles) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
+    public User(String name, String surname, Integer age, Collection<Role> roles) {
+        this.name = name;
+        this.surname = surname;
+        this.age = age;
         this.roles = roles;
     }
 
@@ -48,27 +52,28 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
-    }
-    public void setUsername(String username) {
-        this.username = username;
+    public String getName() {
+        return name;
     }
 
-    public String getPassword() {
-        return password;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public String getSurname() {
+        return surname;
     }
 
-    public String getEmail() {
-        return email;
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
     }
 
     public Collection<Role> getRoles() {
@@ -78,6 +83,15 @@ public class User implements UserDetails {
     public void setRoles(Collection<Role> roles) {
         this.roles = roles;
     }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -104,6 +118,16 @@ public class User implements UserDetails {
     }
 
     @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -120,9 +144,9 @@ public class User implements UserDetails {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", age=" + age +
                 ", roles=" + roles +
                 '}';
     }
