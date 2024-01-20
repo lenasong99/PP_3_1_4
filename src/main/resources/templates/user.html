@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="/user.js"></script>
     <title>User</title>
 
 </head>
 <body>
 <nav class="navbar navbar-dark bg-dark">
     <a class="navbar-brand" href="">
-        <span class="font-weight-bold" th:text="${user.username}"/> with roles:
-        <span th:each="role : ${user.getRoles()}">
-            <span th:text="${role.getAuthority().replace('ROLE_', '' + ' ')}"/>
-      </span>
+        <span th:text="${user.username}"></span>
+        with roles:
+        <span th:each="role : ${user.getRoles()}" th:text="${role.getAuthority().replace('ROLE_', '') + ' '}"></span>
     </a>
     <input type="button" value="Logout" class="btn btn-dark ml-auto"
            onclick="window.location.href = '/logout'">
@@ -40,20 +40,10 @@
                                         <th>Surname</th>
                                         <th>Age</th>
                                         <th>Email</th>
-                                        <th>ROLES</th>
+                                        <th>Role</th>
                                     </tr>
                                     </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td th:text="*{user.id}"></td>
-                                        <td th:text="*{user.name}"></td>
-                                        <td th:text="*{user.surname}"></td>
-                                        <td th:text="*{user.age}"></td>
-                                        <td th:text="*{user.username}"></td>
-                                        <td th:each="role : ${user.getRoles()}">
-                                            <span th:text="${role.getAuthority().replace('ROLE_', '' + ' ')}"/>
-                                        </td>
-                                    </tr>
+                                    <tbody id="userInfo">
                                     </tbody>
                                 </table>
                             </div>
@@ -64,6 +54,7 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" src="/static/user.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>

@@ -1,7 +1,9 @@
 package ru.kata.spring.boot_security.demo.service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,6 +16,7 @@ import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 import javax.persistence.EntityManager;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,7 +46,12 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
     public User getUserById(Integer id) {
-        return userRepository.getById(id);
+        User user = null;
+        Optional<User> userOptionals = userRepository.findById(id);
+        if (userOptionals.isPresent()) {
+            user = userOptionals.get();
+        }
+        return user;
     }
     public void saveUser(User user) {
         userRepository.save(user);
@@ -52,4 +60,5 @@ public class UserService implements UserDetailsService {
     public void deleteUser(Integer id) {
         userRepository.deleteById(id);
     }
+
 }

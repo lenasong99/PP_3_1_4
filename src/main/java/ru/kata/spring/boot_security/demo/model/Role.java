@@ -4,6 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -18,6 +19,17 @@ public class Role implements GrantedAuthority {
     public Role(Integer id) { this.id = id; }
     public Role(String name) {
         this.name = name;
+    }
+    @Transient
+    @ManyToMany(mappedBy = "roles")
+    private List<User> users;
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 
     public Role() {

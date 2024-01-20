@@ -1,3 +1,4 @@
+/*
 package ru.kata.spring.boot_security.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -62,3 +63,4 @@ public class AdminController {
         return "redirect:/admin";
     }
 }
+*/
