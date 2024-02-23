@@ -62,7 +62,6 @@ function editModal(id) {
             })
     });
 }
-let editRole = document.querySelector('#edit-role').selectedOptions
 async function editUser() {
     let idValue = document.getElementById('edit-id').value;
     let nameValue = document.getElementById('edit-name').value;
@@ -130,39 +129,34 @@ async function deleteUser() {
         getAllUsers();
     })
 }
-let newRole = document.querySelector('#rolesCreate').selectedOptions
-function newUserTab() {
-    document.getElementById('newUserForm').addEventListener('submit', (e) => {
-        e.preventDefault()
-        fetch(url + 'new', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify({
-                name: document.getElementById('nameNew').value,
-                surname: document.getElementById('surnameNew').value,
-                age: document.getElementById('ageNew').value,
-                username: document.getElementById('usernameNew').value,
-                password: document.getElementById('passwordNew').value,
-                roles: Array.from(document.getElementById('rolesCreate').selectedOptions)
-                    .map(option => ({
-                        id: option.value,
-                        name: 'ROLE_' + option.text
-                    }))
-            })
+async function newUserTab() {
+    let nameValue = document.getElementById('nameNew').value;
+    let surnameValue = document.getElementById('surnameNew').value;
+    let ageValue = document.getElementById('ageNew').value;
+    let usernameValue = document.getElementById('usernameNew').value;
+    let passwordValue = document.getElementById('passwordNew').value;
+    let method = {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json;charset=UTF-8'
+        },
+        body: JSON.stringify({
+            name: nameValue,
+            surname: surnameValue,
+            age: ageValue,
+            username: usernameValue,
+            password: passwordValue,
+            roles: Array.from(document.getElementById('rolesCreate').selectedOptions)
+                .map(option => ({
+                    id: option.value,
+                    name: 'ROLE_' + option.text
+                }))
         })
-            .then((response) => {
-                if (response.ok) {
-                    document.getElementById('nameNew').value = '';
-                    document.getElementById('surnameNew').value = '';
-                    document.getElementById('ageNew').value = '';
-                    document.getElementById('usernameNew').value = '';
-                    document.getElementById('passwordNew').value = '';
-                    document.getElementById('rolesCreate').value = '';
-                    document.getElementById('allUsers').click()
-                    getAllUsers();
-                }
-            })
+    }
+    let urlNew = url + 'new'
+    await fetch(urlNew, method).then(() => {
+        closeModal();
+        getAllUsers();
     })
 }

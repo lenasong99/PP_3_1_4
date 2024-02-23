@@ -16,13 +16,15 @@ public class Role implements GrantedAuthority {
     private Integer id;
     @Column(name = "name")
     private String name;
+    @Transient
+    @ManyToMany(mappedBy = "roles")
+    private List<User> users;
+    public Role() {
+    }
     public Role(Integer id) { this.id = id; }
     public Role(String name) {
         this.name = name;
     }
-    @Transient
-    @ManyToMany(mappedBy = "roles")
-    private List<User> users;
 
     @Override
     public String toString() {
@@ -30,9 +32,6 @@ public class Role implements GrantedAuthority {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
-    }
-
-    public Role() {
     }
 
     public Integer getId() {

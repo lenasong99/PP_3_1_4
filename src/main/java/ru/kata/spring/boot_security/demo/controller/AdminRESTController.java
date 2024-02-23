@@ -16,11 +16,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/admins")
 @CrossOrigin
-public class MyRESTController {
+public class AdminRESTController {
     private final UserService userService;
     private final RoleRepository roleRepository;
     @Autowired
-    public MyRESTController(UserService userService, RoleRepository roleRepository) {
+    public AdminRESTController(UserService userService, RoleRepository roleRepository) {
         this.userService = userService;
         this.roleRepository = roleRepository;
     }
