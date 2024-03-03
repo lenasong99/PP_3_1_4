@@ -1,5 +1,4 @@
 package ru.kata.spring.boot_security.demo.controller;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,9 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.exception_handling.NoSuchUserException;
-import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.util.List;
@@ -18,11 +15,10 @@ import java.util.List;
 @CrossOrigin
 public class AdminRESTController {
     private final UserService userService;
-    private final RoleRepository roleRepository;
+
     @Autowired
-    public AdminRESTController(UserService userService, RoleRepository roleRepository) {
+    public AdminRESTController(UserService userService) {
         this.userService = userService;
-        this.roleRepository = roleRepository;
     }
     @GetMapping
     public ResponseEntity<List<User>> showAllUsers() {
@@ -41,10 +37,6 @@ public class AdminRESTController {
         return new ResponseEntity<> (userAuth, HttpStatus.OK);
     }
 
-    @GetMapping("/roles")
-    public List<Role> getAllRoles() {
-        return roleRepository.findAll();
-    }
     @PostMapping("/new")
     public ResponseEntity<HttpStatus> addUser(@RequestBody User user) {
         userService.saveUser(user);

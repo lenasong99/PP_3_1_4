@@ -44,21 +44,30 @@ function closeModal() {
 }
 
 function editModal(id) {
-    let editId =url +'users/' + id;
+    let editId = url +'users/' + id;
     fetch(editId, {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json;charset=UTF-8'
         }
         }).then(res => {
-            res.json().then(user => {
+            res.json()
+            .then(user => {
                 document.getElementById('edit-id').value = user.id;
                 document.getElementById('edit-name').value = user.name;
                 document.getElementById('edit-surname').value = user.surname;
                 document.getElementById('edit-age').value = user.age;
                 document.getElementById('edit-username').value = user.username;
                 document.getElementById('edit-password').value = user.password;
-                document.getElementById('edit-role').value = user.role;
+                const role_ed = document.getElementById('edit-role');
+                const roleIds = user.roles.map(role => Number(role.id));
+                for (const option of role_ed.options) {
+                    if (roleIds.includes(Number(option.value))) {
+                        option.setAttribute('selected', 'selected');
+                    } else {
+                        option.removeAttribute('selected');
+                    }
+                }
             })
     });
 }
@@ -85,7 +94,7 @@ async function editUser() {
             roles: Array.from(document.getElementById('edit-role').selectedOptions)
                 .map(option => ({
                     id: option.value,
-                    name: 'ROLE_' + option.text
+                    name: 'ROLE_' + option.value
                 }))
         })
     }
@@ -129,34 +138,41 @@ async function deleteUser() {
         getAllUsers();
     })
 }
-async function newUserTab() {
-    let nameValue = document.getElementById('nameNew').value;
-    let surnameValue = document.getElementById('surnameNew').value;
-    let ageValue = document.getElementById('ageNew').value;
-    let usernameValue = document.getElementById('usernameNew').value;
-    let passwordValue = document.getElementById('passwordNew').value;
-    let method = {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json;charset=UTF-8'
-        },
-        body: JSON.stringify({
-            name: nameValue,
-            surname: surnameValue,
-            age: ageValue,
-            username: usernameValue,
-            password: passwordValue,
-            roles: Array.from(document.getElementById('rolesCreate').selectedOptions)
-                .map(option => ({
-                    id: option.value,
-                    name: 'ROLE_' + option.text
-                }))
+
+function newUserTab() {
+    document.getElementById('newUserForm').addEventListener('submit', (e) => {
+        e.preventDefault()
+
+        fetch(url + 'new', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify({
+                name: document.getElementById('nameNew').value,
+                surname: document.getElementById('surnameNew').value,
+                age: document.getElementById('ageNew').value,
+                username: document.getElementById('usernameNew').value,
+                password: document.getElementById('passwordNew').value,
+                roles: Array.from(document.getElementById('rolesCreate').selectedOptions)
+                    .map(option => ({
+                        id: option.value,
+                        name: 'ROLE_' + option.value
+                    }))
+            })
         })
-    }
-    let urlNew = url + 'new'
-    await fetch(urlNew, method).then(() => {
-        closeModal();
-        getAllUsers();
+            .then((response) => {
+                if (response.ok) {
+                    document.getElementById('nameNew').value = '';
+                    document.getElementById('surnameNew').value = '';
+                    document.getElementById('ageNew').value = '';
+                    document.getElementById('usernameNew').value = '';
+                    document.getElementById('passwordNew').value = '';
+                    document.getElementById('rolesCreate').value = '';
+                    document.getElementById('allUsers').click()
+                    closeModal();
+                    getAllUsers();
+                }
+            })
     })
 }

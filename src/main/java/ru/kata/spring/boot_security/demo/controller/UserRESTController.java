@@ -1,5 +1,4 @@
 package ru.kata.spring.boot_security.demo.controller;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +10,7 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/thisUser")
+@RequestMapping("/api/user")
 public class UserRESTController {
     private final UserService userService;
 
@@ -19,7 +18,7 @@ public class UserRESTController {
         this.userService = userService;
     }
 
-    @GetMapping()
+    @GetMapping("/thisUser")
     public ResponseEntity<User> showUser(Principal principal) {
         User user = userService.findByUsername(principal.getName());
         return new ResponseEntity<>(user, HttpStatus.OK);

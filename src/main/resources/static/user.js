@@ -1,4 +1,4 @@
-const userUrl = 'http://localhost:8484/api/admins/userAuth';
+const userUrl = 'http://localhost:8484/api/user/thisUser';
 
 
 function getPage() {
